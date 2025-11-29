@@ -17,7 +17,7 @@
                 <input type="password" class="form-control mb-3" placeholder="Password" id="userPassword">
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
-            <p class="text-center mt-3">New user? <a href="#">Sign up</a></p>
+           
             <p class="text-center mt-3">New user? <a href="signup.html">Sign up</a></p>
             <a href="../dashboard.html" class="btn btn-link w-100">⬅ Back to Dashboard</a>
             <div id="errorMessage" class="text-danger mt-3 text-center" style="display: none;">
@@ -27,24 +27,38 @@
     </div>
 
     <script>
+        // Accept any email/password for demo purposes and create a minimal user record.
         document.getElementById('userLoginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const userEmail = document.getElementById('userEmail').value.trim().toLowerCase();
             const userPassword = document.getElementById('userPassword').value;
-            const errorMessageDiv = document.getElementById('errorMessage');
+
+            // Create a simple display name from the email local-part if possible
+            let name = 'User';
+            if(userEmail){
+                const parts = userEmail.split('@');
+                if(parts[0]){
+                    name = parts[0].replace(/[._\-]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+                }
+            }
+
+            const user = { name: name, email: userEmail, phone: '' };
 
             try{
+                // Optionally store in users list for demo persistence
                 const users = JSON.parse(localStorage.getItem('users')||'[]');
-                const user = users.find(u=>u.email === userEmail && u.password === userPassword);
-                if(user){
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    localStorage.setItem('userProfile', JSON.stringify({name:user.name,email:user.email,phone:user.phone}));
-                    localStorage.setItem('userLoggedIn','true');
-                    window.location.href = 'user_dashboard.html';
-                    return;
+                // only add if not already present
+                if(userEmail && !users.find(u=>u.email===userEmail)){
+                    users.push(Object.assign({password: userPassword}, user));
+                    localStorage.setItem('users', JSON.stringify(users));
                 }
-            }catch(e){/* ignore */}
-            errorMessageDiv.style.display = 'block';
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('userProfile', JSON.stringify(user));
+                localStorage.setItem('userLoggedIn','true');
+            }catch(e){/* ignore storage errors */}
+
+            // Redirect to dashboard
+            window.location.href = 'user_dashboard.html';
         });
     </script>
 
