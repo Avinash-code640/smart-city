@@ -1,7 +1,7 @@
 :root{
   --primary: #0d6efd; /* bootstrap blue */
   --accent:#ff7a59; /* warm accent */
-  --bg:#f4f7fb;
+  --bg:#eef6f9; /* soft off-white / pale blue background */
   --card:#ffffff;
   --muted:#6c757d;
 }
