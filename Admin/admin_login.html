@@ -24,23 +24,14 @@
     </div>
 
     <script>
+        // Allow admin to login with any id/password for demo purposes.
         document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevents the form from submitting and refreshing the page
-
-            const adminIdInput = document.getElementById('adminId');
-            const passwordInput = document.getElementById('password');
-            const errorMessageDiv = document.getElementById('errorMessage');
-
-            // Hardcoded correct credentials for demonstration
-            const correctAdminId = 'Avinash';
-            const correctPassword = 'admin123';
-
-            if (adminIdInput.value === correctAdminId && passwordInput.value === correctPassword) {
-                window.location.href = 'admin_dashboard.html';
-            } else {
-                // If credentials are incorrect, show the error message on the page.
-                errorMessageDiv.style.display = 'block';
-            }
+            event.preventDefault();
+            try{
+                // mark admin as logged in (client-side demo only)
+                localStorage.setItem('adminLoggedIn','true');
+            }catch(e){ /* ignore */ }
+            window.location.href = 'admin_dashboard.html';
         });
     </script>
 
