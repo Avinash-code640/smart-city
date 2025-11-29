@@ -49,10 +49,11 @@
         <div class="col-12 col-md-10 main-content">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Welcome to Smart City</h2>
-                <div>
-                    <button id="profileIconBtn" class="btn btn-outline-secondary p-0" style="width:44px;height:44px;border-radius:50%;overflow:hidden;">
+                <div class="d-flex align-items-center">
+                    <button id="profileIconBtn" class="btn btn-outline-secondary p-0 me-2" style="width:44px;height:44px;border-radius:50%;overflow:hidden;">
                         <div id="profileAvatar" style="width:100%;height:100%;border-radius:50%;background:#0d6efd;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;">U</div>
                     </button>
+                    <button id="userLogoutBtn" class="btn btn-sm btn-outline-danger">Logout</button>
                 </div>
             </div>
             <!-- Inline edit form (hidden) -->
@@ -152,6 +153,7 @@
     const inputName = document.getElementById('inputName');
     const inputEmail = document.getElementById('inputEmail');
     const inputPhone = document.getElementById('inputPhone');
+    const logoutBtn = document.getElementById('userLogoutBtn');
 
     function loadProfile(){
         try{
@@ -176,6 +178,17 @@
         formCard.style.display = formCard.style.display === 'none' ? 'block' : 'none';
         if(formCard.style.display === 'block') setTimeout(()=> inputName.focus(), 50);
     });
+
+    // Logout: clear session and redirect to main dashboard
+    if(logoutBtn){
+        logoutBtn.addEventListener('click', function(){
+            try{
+                localStorage.removeItem('userLoggedIn');
+                localStorage.removeItem('currentUser');
+            }catch(e){}
+            window.location.href = '../dashboard.html';
+        });
+    }
 
     profileForm.addEventListener('submit', function(e){
         e.preventDefault();

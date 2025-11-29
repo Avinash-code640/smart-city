@@ -18,6 +18,7 @@
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
             <p class="text-center mt-3">New user? <a href="#">Sign up</a></p>
+            <p class="text-center mt-3">New user? <a href="signup.html">Sign up</a></p>
             <a href="../dashboard.html" class="btn btn-link w-100">⬅ Back to Dashboard</a>
             <div id="errorMessage" class="text-danger mt-3 text-center" style="display: none;">
                 Invalid email or password.
@@ -27,26 +28,23 @@
 
     <script>
         document.getElementById('userLoginForm').addEventListener('submit', function(event) {
-            // Prevent the default form submission
-            event.preventDefault(); 
-
-            // Get the input values
-            const userEmail = document.getElementById('userEmail').value;
+            event.preventDefault();
+            const userEmail = document.getElementById('userEmail').value.trim().toLowerCase();
             const userPassword = document.getElementById('userPassword').value;
             const errorMessageDiv = document.getElementById('errorMessage');
 
-            // Hardcoded correct credentials
-            const correctEmail = 'Avinash@example.com'; 
-            const correctPassword = 'user123';
-
-            // Check if credentials are correct
-            if (userEmail === correctEmail && userPassword === correctPassword) {
-                // Redirect to the user_dashboard.html page
-                window.location.href = 'user_dashboard.html'; 
-            } else {
-                // Show the error message on the page
-                errorMessageDiv.style.display = 'block';
-            }
+            try{
+                const users = JSON.parse(localStorage.getItem('users')||'[]');
+                const user = users.find(u=>u.email === userEmail && u.password === userPassword);
+                if(user){
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('userProfile', JSON.stringify({name:user.name,email:user.email,phone:user.phone}));
+                    localStorage.setItem('userLoggedIn','true');
+                    window.location.href = 'user_dashboard.html';
+                    return;
+                }
+            }catch(e){/* ignore */}
+            errorMessageDiv.style.display = 'block';
         });
     </script>
 
